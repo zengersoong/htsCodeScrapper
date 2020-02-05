@@ -1,5 +1,5 @@
 var express = require("express");
-var { search,searchByCode } = require("../server.js");
+var { search, searchByCode } = require("../server.js");
 var router = express.Router();
 
 router.get("/:search", async function(req, res) {

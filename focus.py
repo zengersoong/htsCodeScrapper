@@ -94,7 +94,8 @@ def modify(table):
             if chemical_flag == False:
                 new_word_tokens += splits
         # 1.2 removing stop words
-        word_tokens = [w.lower() for w in new_word_tokens if not w in stop_words]
+        word_tokens = [w.lower()
+                       for w in new_word_tokens if not w in stop_words]
         # 1.3 Using word Lematizer on words
         lemantized = [lemmatizer.lemmatize(w) for w in word_tokens]
         lemantized_a = [lemmatizer.lemmatize(w, 'a') for w in word_tokens]
@@ -204,8 +205,8 @@ def dfToRecords(table):
     """
 
     df = pd.DataFrame(table)
-    output_csv = 'modified.csv'
-    output_json = 'modified.json'
+    output_csv = 'hts_us.csv'
+    output_json = 'hts_us.json'
     output_dir = Path(os.getenv("modified_file_path"))
     # parents = True will also create any necessary parent directories
     output_dir.mkdir(parents=True, exist_ok=True)

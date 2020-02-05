@@ -3,30 +3,46 @@ var express = require("express");
 
 var router = express.Router();
 var {
-  fetch,
-  runWithoutNightmare,
-  getLastUpdatedTimestamp
-} = require("../server.js");
+  updateUS,
+  updateOfflineUS,
+  getLastUpdatedUSTimestamp
+} = require("../scrappers/us.js");
+var { updateJP } = require("../scrappers/jp.js");
 let config = JSON.parse(fs.readFileSync("config.json"));
 
-router.get("/getLatest", async function(req, res) {
+router.get("/getLatestUS", async function(req, res) {
   var io = req.app.get("socketio");
   res.send(true);
-  result = await fetch(config["number_retries"], io);
+  // result = await updateJP(config["number_retries"], io);
+  result = await updateUS(config["number_retries"], io);
   console.log("Fetching Completed");
   console.log(result);
   io.sockets.emit("processed", result);
 });
 
-router.get("/getLocal", async function(req, res) {
-  result = await runWithoutNightmare();
+router.get("/getLocalUS", async function(req, res) {
+  result = await updateOfflineUS();
   console.log("Running Without Nightmare...");
   console.log(result);
   res.send(result);
 });
 
-router.get("/getLastUpdate", async function(req, res) {
-  result = await getLastUpdatedTimestamp();
+router.get("/getLastUpdateUS", async function(req, res) {
+  result = await getLastUpdatedUSTimestamp();
+  res.send(result);
+});
+
+router.get("/getLatestJp", async function(req, res) {
+  var io = req.app.get("socketio");
+  res.send(true);
+  result = await updateJP(config["number_retries"], io);
+  console.log("Fetching Completed");
+  console.log(result);
+  io.sockets.emit("processed", result);
+});
+
+router.get("/getLastUpdateJP", async function(req, res) {
+  result = await getLastUpdatedJPTimestamp();
   res.send(result);
 });
 
